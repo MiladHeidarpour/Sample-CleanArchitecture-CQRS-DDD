@@ -8,7 +8,7 @@ namespace Shop.Application.Users.Edit;
 
 public class EditUserCommand : IBaseCommand
 {
-    public long UserId { get; private set; }
+    public long UserId { get;  set; }
     public IFormFile? Avatar { get; private set; }
     public string Name { get; private set; }
     public string Family { get; private set; }

@@ -20,7 +20,7 @@ internal class GetOrderByIdQueryHandler : IQueryHandler<GetOrderByIdQuery, Order
 
     public async Task<OrderDto?> Handle(GetOrderByIdQuery request, CancellationToken cancellationToken)
     {
-        var order = await _context.Orders.FirstOrDefaultAsync(f => f.Id == request.OrderId);
+        var order = await _context.Orders.FirstOrDefaultAsync(f => f.Id == request.OrderId, cancellationToken);
 
         if (order == null)
         {

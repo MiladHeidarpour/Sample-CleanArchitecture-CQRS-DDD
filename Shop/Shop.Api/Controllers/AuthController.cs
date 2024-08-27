@@ -129,9 +129,41 @@ public class AuthController : ApiController
 
     private async Task<OperationResult<LoginResultDto?>> AddTokenAndGenerateJwt(UserDto user)
     {
+        //var uaParser = Parser.GetDefault();
+        //var info = uaParser.Parse(HttpContext.Request.Headers["user-agent"]);
+        //var device = $"{info.Device.Family}/{info.OS} {info.OS.Major}.{info.OS.Minor} - {info.UA.Family}";
+        //var token = JwtTokenBuilder.BuildToken(user, _configuration);
+        //var refreshToken = Guid.NewGuid().ToString();
+
+        //var hashJwt = Sha256Hasher.Hash(token);
+        //var hashRefreshToken = Sha256Hasher.Hash(refreshToken);
+
+
+        //var tokenResult = await _userFacade.AddToken(new AddUserTokenCommand(user.Id, hashJwt, hashRefreshToken, DateTime.Now.AddDays(7), DateTime.Now.AddDays(8), device));
+
+        //if (tokenResult.Status != OperationResultStatus.Success)
+        //{
+        //    return OperationResult<LoginResultDto?>.Error();
+        //}
+
+        //return OperationResult<LoginResultDto?>.Success(new LoginResultDto()
+        //{
+        //    Token = token,
+        //    RefreshToken = refreshToken,
+        //});
+
+
+
+        //test
         var uaParser = Parser.GetDefault();
-        var info = uaParser.Parse(HttpContext.Request.Headers["user-agent"]);
-        var device = $"{info.Device.Family}/{info.OS} {info.OS.Major}.{info.OS.Minor} - {info.UA.Family}";
+        var header = HttpContext.Request.Headers["user-agent"].ToString();
+        var device = "window";
+        if (header!=null)
+        {
+            var info = uaParser.Parse(header);
+            device = $"{info.Device.Family}/{info.OS} {info.OS.Major}.{info.OS.Minor} - {info.UA.Family}";
+        }
+       
         var token = JwtTokenBuilder.BuildToken(user, _configuration);
         var refreshToken = Guid.NewGuid().ToString();
 
@@ -151,5 +183,6 @@ public class AuthController : ApiController
             Token = token,
             RefreshToken = refreshToken,
         });
+
     }
 }

@@ -51,6 +51,12 @@ public class User : AggregateRoot
         Gender = gender;
     }
 
+    public void ChangePassword(string newPassword)
+    {
+        NullOrEmptyDomainDataException.CheckString(newPassword, nameof(newPassword));
+        Password = newPassword;
+    }
+
     public void SetAvatar(string imageName)
     {
         if (string.IsNullOrWhiteSpace(imageName))
@@ -116,14 +122,14 @@ public class User : AggregateRoot
             throw new InvalidDomainDataException("امکان استفاده همزمان از 4 دستگاه وجود ندارد");
         }
         var token = new UserToken(hashJwtToken, hashRefreshToken, tokenExpireDate, refreshTokenExpireDate, device);
-        token.UserId= Id;
+        token.UserId = Id;
         Tokens.Add(token);
     }
 
     public void RemoveToken(long tokenId)
     {
-        var token= Tokens.FirstOrDefault(c => c.Id == tokenId);
-        if (token==null)
+        var token = Tokens.FirstOrDefault(c => c.Id == tokenId);
+        if (token == null)
         {
             new InvalidDomainDataException("Invalid TokenId");
         }
