@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Common.AspNetCore;
+using Common.Domain.ValueObjects;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shop.Api.ViewModels.Users;
@@ -38,8 +39,7 @@ public class UserAddressController : ApiController
     [HttpPost]
     public async Task<ApiResult> AddAddress(AddUserAddressViewModel viewModel)
     {
-        var command = _mapper.Map<AddUserAddressCommand>(viewModel);
-        command.UserId = User.GetUserId();
+        var command = new AddUserAddressCommand(User.GetUserId(), viewModel.Shire, viewModel.City, viewModel.PostalCode, viewModel.PostalAddress, new PhoneNumber(viewModel.PhoneNumber), viewModel.Name, viewModel.Family, viewModel.NationalCode);
         var result = await _userAddress.AddAddress(command);
         return CommandResult(result);
     }
@@ -55,8 +55,7 @@ public class UserAddressController : ApiController
     [HttpPut]
     public async Task<ApiResult> Edit(EditUserAddressViewModel viewModel)
     {
-        var command = _mapper.Map<EditUserAddressCommand>(viewModel);
-        command.UserId = User.GetUserId();
+        var command = new EditUserAddressCommand(User.GetUserId(), viewModel.Shire, viewModel.City, viewModel.PostalCode, viewModel.PostalAddress, new PhoneNumber(viewModel.PhoneNumber), viewModel.Name, viewModel.Family, viewModel.NationalCode);
         var result = await _userAddress.EditAddress(command);
         return CommandResult(result);
     }
