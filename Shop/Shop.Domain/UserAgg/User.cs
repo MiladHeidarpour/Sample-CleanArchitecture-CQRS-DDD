@@ -96,6 +96,22 @@ public class User : AggregateRoot
         Addresses.Remove(oldAddress);
     }
 
+    public void SetActiveAddress(long addressId)
+    {
+        var currentAddress = Addresses.FirstOrDefault(f => f.Id == addressId);
+        if (currentAddress == null)
+        {
+            throw new NullOrEmptyDomainDataException("AddressNotFound");
+        }
+
+        foreach (var item in Addresses)
+        {
+            item.SetDeActive();
+        }
+        currentAddress.SetActive();
+
+    }
+
     // Wallets
 
     public void ChargeWallet(Wallet wallet)

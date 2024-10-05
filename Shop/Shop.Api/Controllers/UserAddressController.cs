@@ -7,6 +7,7 @@ using Shop.Api.ViewModels.Users;
 using Shop.Application.Users.AddAddress;
 using Shop.Application.Users.DeleteAddress;
 using Shop.Application.Users.EditAddress;
+using Shop.Application.Users.SetActiveAddress;
 using Shop.Presentation.Facade.Users.Addresses;
 using Shop.Query.Users.DTOs.Addresses;
 
@@ -47,7 +48,7 @@ public class UserAddressController : ApiController
     [HttpDelete("{addressId}")]
     public async Task<ApiResult> Delete(long addressId)
     {
-        var userId = 1;
+        var userId = User.GetUserId();
         var result = await _userAddress.DeleteAddress(new DeleteUserAddressCommand(userId, addressId));
         return CommandResult(result);
     }
@@ -55,8 +56,16 @@ public class UserAddressController : ApiController
     [HttpPut]
     public async Task<ApiResult> Edit(EditUserAddressViewModel viewModel)
     {
-        var command = new EditUserAddressCommand(User.GetUserId(), viewModel.Shire, viewModel.City, viewModel.PostalCode, viewModel.PostalAddress, new PhoneNumber(viewModel.PhoneNumber), viewModel.Name, viewModel.Family, viewModel.NationalCode);
+        var command = new EditUserAddressCommand(User.GetUserId(), viewModel.Shire, viewModel.City, viewModel.PostalCode, viewModel.PostalAddress, new PhoneNumber(viewModel.PhoneNumber), viewModel.Name, viewModel.Family, viewModel.NationalCode, viewModel.Id);
         var result = await _userAddress.EditAddress(command);
+        return CommandResult(result);
+    }
+
+    [HttpPut("SetActiveAddress/{addressId}")]
+    public async Task<ApiResult> SetActiveAddress(long addressId)
+    {
+        var command = new SetActiveUserAddressCommand(User.GetUserId(), addressId);
+        var result = await _userAddress.SetActiveAddress(command);
         return CommandResult(result);
     }
 }

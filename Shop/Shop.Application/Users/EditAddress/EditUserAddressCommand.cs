@@ -16,8 +16,9 @@ public class EditUserAddressCommand:IBaseCommand
     public string Family { get; private set; }
     public string NationalCode { get; private set; }
 
-    public EditUserAddressCommand( long userId,string shire, string city, string postalCode, string postalAddress, PhoneNumber phoneNumber, string name, string family, string nationalCode)
+    public EditUserAddressCommand( long userId,string shire, string city, string postalCode, string postalAddress, PhoneNumber phoneNumber, string name, string family, string nationalCode, long id)
     {
+        Id = id;
         UserId = userId;
         Shire = shire;
         City = city;

@@ -38,15 +38,22 @@ public class SliderController : ApiController
     }
 
     [HttpPost]
-    public async Task<ApiResult> Create(CreateSliderCommand command)
+    public async Task<ApiResult> Create([FromForm] CreateSliderCommand command)
     {
         var result = await _silderFacade.CreateSlider(command);
         return CommandResult(result);
     }
     [HttpPut]
-    public async Task<ApiResult> Edit(EditSliderCommand command)
+    public async Task<ApiResult> Edit([FromForm] EditSliderCommand command)
     {
         var result = await _silderFacade.EditSlider(command);
+        return CommandResult(result);
+    }
+
+    [HttpDelete("{sliderId}")]
+    public async Task<ApiResult> Delete(long sliderId)
+    {
+        var result = await _silderFacade.DeleteSlider(sliderId);
         return CommandResult(result);
     }
 }

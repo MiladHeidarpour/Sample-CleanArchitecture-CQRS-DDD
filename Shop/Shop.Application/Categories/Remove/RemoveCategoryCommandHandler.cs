@@ -17,6 +17,7 @@ internal class RemoveCategoryCommandHandler : IBaseCommandHandler<RemoveCategory
         var result=await _repository.DeleteCategory(request.CategoryId);
         if (result==true)
         {
+            await _repository.Save();
             return OperationResult.Success();
         }
         return OperationResult.Error("امکان حذف این دسته بندی وجود ندارد");

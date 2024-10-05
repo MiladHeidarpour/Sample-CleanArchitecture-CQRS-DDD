@@ -50,6 +50,11 @@ public class UserAddress : BaseEntity
         ActiveAddress = true;
     }
 
+    public void SetDeActive()
+    {
+        ActiveAddress = false;
+    }
+
     public void Gaurd(string shire, string city, string postalCode, string postalAddress, PhoneNumber phoneNumber, string name, string family, string nationalCode)
     {
         if (phoneNumber==null)

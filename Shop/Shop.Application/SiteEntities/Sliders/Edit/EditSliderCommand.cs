@@ -5,16 +5,9 @@ namespace Shop.Application.SiteEntities.Sliders.Edit;
 
 public class EditSliderCommand : IBaseCommand
 {
-    public long Id { get;private set; }
-    public string Title { get; private set; }
-    public string Link { get; private set; }
-    public IFormFile? ImageFile { get; private set; }
+    public long Id { get; set; }
+    public string Title { get;  set; }
+    public string Link { get;  set; }
+    public IFormFile? ImageFile { get;  set; }
 
-    public EditSliderCommand(long id,string title, string link, IFormFile? imageFile)
-    {
-        Id = id;
-        Title = title;
-        Link = link;
-        ImageFile = imageFile;
-    }
 }

@@ -36,13 +36,13 @@ public class BannerController : ApiController
     }
 
     [HttpPost]
-    public async Task<ApiResult> Create(CreateBannerCommand command)
+    public async Task<ApiResult> Create([FromForm] CreateBannerCommand command)
     {
         var result = await _bannerFacade.CreateBanner(command);
         return CommandResult(result);
     }
     [HttpPut]
-    public async Task<ApiResult> Edit(EditBannerCommand command)
+    public async Task<ApiResult> Edit([FromForm] EditBannerCommand command)
     {
         var result = await _bannerFacade.EditBanner(command);
         return CommandResult(result);
