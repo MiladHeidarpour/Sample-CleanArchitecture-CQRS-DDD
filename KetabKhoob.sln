@@ -29,7 +29,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shop.Api", "Shop\Shop.Api\S
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shop.Config", "Shop\Shop.Config\Shop.Config.csproj", "{731C9185-B93A-43A2-AD48-9A1BB9A8CEE6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.AspNetCore", "Common\Common.AspNetCore\Common.AspNetCore.csproj", "{21698172-D1C9-4318-87C7-784FC76B2025}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.AspNetCore", "Common\Common.AspNetCore\Common.AspNetCore.csproj", "{21698172-D1C9-4318-87C7-784FC76B2025}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.CacheHelper", "Common\Common.CacheHelper\Common.CacheHelper.csproj", "{1062D30C-73C0-4C1C-B90B-490A616F7B1A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -81,6 +83,10 @@ Global
 		{21698172-D1C9-4318-87C7-784FC76B2025}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{21698172-D1C9-4318-87C7-784FC76B2025}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{21698172-D1C9-4318-87C7-784FC76B2025}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1062D30C-73C0-4C1C-B90B-490A616F7B1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1062D30C-73C0-4C1C-B90B-490A616F7B1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1062D30C-73C0-4C1C-B90B-490A616F7B1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1062D30C-73C0-4C1C-B90B-490A616F7B1A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -98,6 +104,7 @@ Global
 		{9F78A071-074E-4C8D-BADB-9049DD9D66DF} = {71E67694-CB5E-4447-8C6D-34C442E5793A}
 		{731C9185-B93A-43A2-AD48-9A1BB9A8CEE6} = {1996D80B-1EB9-487F-B7C2-A19C6EFBED8D}
 		{21698172-D1C9-4318-87C7-784FC76B2025} = {AB23C50F-C7D2-46ED-907D-F2DAD64D6F73}
+		{1062D30C-73C0-4C1C-B90B-490A616F7B1A} = {AB23C50F-C7D2-46ED-907D-F2DAD64D6F73}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AAD61080-AF2F-4C78-9738-419AA6E20D6D}

@@ -142,7 +142,7 @@ public class User : AggregateRoot
         Tokens.Add(token);
     }
 
-    public void RemoveToken(long tokenId)
+    public string RemoveToken(long tokenId)
     {
         var token = Tokens.FirstOrDefault(c => c.Id == tokenId);
         if (token == null)
@@ -150,6 +150,7 @@ public class User : AggregateRoot
             new InvalidDomainDataException("Invalid TokenId");
         }
         Tokens.Remove(token);
+        return token.HashJwtToken;
     }
 
     //Gaurd

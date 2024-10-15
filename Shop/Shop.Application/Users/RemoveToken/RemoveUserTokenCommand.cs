@@ -3,4 +3,4 @@ using Common.Domain.Exceptions;
 
 namespace Shop.Application.Users.RemoveToken;
 
-public record RemoveUserTokenCommand(long UserId, long TokenId) : IBaseCommand;
+public record RemoveUserTokenCommand(long UserId, long TokenId) : IBaseCommand<string>;

@@ -1,5 +1,7 @@
 ﻿using Common.Application;
+using Common.CacheHelper;
 using MediatR;
+using Microsoft.Extensions.Caching.Distributed;
 using Shop.Application.Products.AddImage;
 using Shop.Application.Products.Create;
 using Shop.Application.Products.Edit;
@@ -12,12 +14,14 @@ using Shop.Query.Products.GetForShop;
 
 namespace Shop.Presentation.Facade.Products;
 
-internal class ProductFacade:IProductFacade
+internal class ProductFacade : IProductFacade
 {
     private readonly IMediator _mediator;
-    public ProductFacade(IMediator mediator)
+    private readonly IDistributedCache _distributedCache;
+    public ProductFacade(IMediator mediator, IDistributedCache distributedCache)
     {
         _mediator = mediator;
+        _distributedCache = distributedCache;
     }
 
     public async Task<OperationResult> CreateProduct(CreateProductCommand command)
@@ -27,17 +31,34 @@ internal class ProductFacade:IProductFacade
 
     public async Task<OperationResult> EditProduct(EditProductCommand command)
     {
-        return await _mediator.Send(command);
+        var result = await _mediator.Send(command);
+        if (result.Status == OperationResultStatus.Success)
+        {
+            await _distributedCache.RemoveAsync(CacheKeys.Product(command.Slug));
+        }
+        return result;
     }
 
     public async Task<OperationResult> AddImage(AddProductImageCommand command)
     {
-        return await _mediator.Send(command); ;
+        var result = await _mediator.Send(command);
+        if (result.Status == OperationResultStatus.Success)
+        {
+            var product = await GetProductById(command.ProductId);
+            await _distributedCache.RemoveAsync(CacheKeys.Product(product.Slug));
+        }
+        return result;
     }
 
     public async Task<OperationResult> RemoveImage(RemoveProductImageCommand command)
     {
-        return await _mediator.Send(command);
+        var result = await _mediator.Send(command);
+        if (result.Status == OperationResultStatus.Success)
+        {
+            var product = await GetProductById(command.ProductId);
+            await _distributedCache.RemoveAsync(CacheKeys.Product(product.Slug));
+        }
+        return result;
     }
 
     public async Task<ProductDto?> GetProductById(long productId)
@@ -47,7 +68,10 @@ internal class ProductFacade:IProductFacade
 
     public async Task<ProductDto?> GetProductBySlug(string slug)
     {
-        return await _mediator.Send(new GetProductBySlugQuery(slug));
+        return await _distributedCache.GetOrSet(CacheKeys.Product(slug), () =>
+        {
+            return _mediator.Send(new GetProductBySlugQuery(slug));
+        });
     }
     public async Task<ProductFilterResult> GetProductsByFilter(ProductFilterParams filterParams)
     {

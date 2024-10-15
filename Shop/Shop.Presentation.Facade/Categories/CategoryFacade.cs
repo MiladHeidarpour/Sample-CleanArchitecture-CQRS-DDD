@@ -1,5 +1,7 @@
 ﻿using Common.Application;
+using Common.CacheHelper;
 using MediatR;
+using Microsoft.Extensions.Caching.Distributed;
 using Shop.Application.Categories.AddChild;
 using Shop.Application.Categories.Create;
 using Shop.Application.Categories.Edit;
@@ -15,10 +17,12 @@ namespace Shop.Presentation.Facade.Categories;
 internal class CategoryFacade : ICategoryFacade
 {
     private readonly IMediator _mediator;
+    private readonly IDistributedCache _distributedCache;
 
-    public CategoryFacade(IMediator mediator)
+    public CategoryFacade(IMediator mediator, IDistributedCache distributedCache)
     {
         _mediator = mediator;
+        _distributedCache = distributedCache;
     }
 
     public async Task<OperationResult<long>> AddChild(AddChildCategoryCommand command)
@@ -44,7 +48,10 @@ internal class CategoryFacade : ICategoryFacade
 
     public async Task<List<CategoryDto>> GetCategories()
     {
-        return await _mediator.Send(new GetCategoryListQuery());
+        return await _distributedCache.GetOrSet(CacheKeys.Categories, () =>
+        {
+            return _mediator.Send(new GetCategoryListQuery());
+        });
     }
 
     public async Task<CategoryDto> GetCategoryById(long id)
