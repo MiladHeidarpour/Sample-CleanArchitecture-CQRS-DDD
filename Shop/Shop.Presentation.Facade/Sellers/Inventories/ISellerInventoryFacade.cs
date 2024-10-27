@@ -13,4 +13,5 @@ public interface ISellerInventoryFacade
 
     Task<InventoryDto?> GetById(long inventoryId);
     Task<List<InventoryDto>> GetList(long sellerId);
+    Task<List<InventoryDto>> GetByProductId(long productId);
 }

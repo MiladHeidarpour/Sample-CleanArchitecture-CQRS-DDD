@@ -245,6 +245,30 @@ namespace Shop.Infrastructure.Migrations
                     b.ToTable("Banners");
                 });
 
+            modelBuilder.Entity("Shop.Domain.SiteEntities.ShippingMethod", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
+
+                    b.Property<int>("Cost")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("nvarchar(120)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ShippingMethods");
+                });
+
             modelBuilder.Entity("Shop.Domain.SiteEntities.Slider", b =>
                 {
                     b.Property<long>("Id")
@@ -503,7 +527,7 @@ namespace Shop.Infrastructure.Migrations
                                 .HasForeignKey("OrderId");
                         });
 
-                    b.OwnsOne("Shop.Domain.OrderAgg.ValueObjects.ShippingMethod", "ShippingMethod", b1 =>
+                    b.OwnsOne("Shop.Domain.OrderAgg.ValueObjects.OrderShippingMethod", "ShippingMethod", b1 =>
                         {
                             b1.Property<long>("OrderId")
                                 .HasColumnType("bigint");

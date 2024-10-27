@@ -95,19 +95,12 @@ public class SellerController : ApiController
         return QueryResult(result);
     }
 
-    [PermissionChecker(Permission.Seller_Panel)]
-    [HttpGet("Inventory/{invntoryId}")]
-    public async Task<ApiResult<InventoryDto>> GetInventories(long invntoryId)
+    //[PermissionChecker(Permission.Seller_Panel)]
+    [HttpGet("Inventory/{inventoryId}")]
+    public async Task<ApiResult<InventoryDto>> GetInventories(long inventoryId)
     {
-        var seller = await _sellerFacade.GetSellerById(User.GetUserId());
-
-        if (seller == null)
-        {
-            return QueryResult(new InventoryDto());
-        }
-
-        var result = await _sellerInventoryFacade.GetById(invntoryId);
-        if (result == null || result.SellerId != seller.Id)
+        var result = await _sellerInventoryFacade.GetById(inventoryId);
+        if (result == null)
         {
             return QueryResult(new InventoryDto());
         }

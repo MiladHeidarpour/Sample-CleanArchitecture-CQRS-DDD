@@ -5,6 +5,7 @@ using Shop.Api.Infrastructure.Security;
 using Shop.Application.Comments.ChangeStatus;
 using Shop.Application.Comments.Create;
 using Shop.Application.Comments.Edit;
+using Shop.Domain.CommentAgg.Enums;
 using Shop.Domain.RoleAgg.Enums;
 using Shop.Presentation.Facade.Comments;
 using Shop.Query.Comments.DTOs;
@@ -25,6 +26,19 @@ public class CommentController : ApiController
     public async Task<ApiResult<CommentFilterResult>> GetCommentByFilter([FromQuery] CommentFilterParams filterParams)
     {
         var result = await _commentFacade.GetCommentByFilter(filterParams);
+        return QueryResult(result);
+    }
+
+    [HttpGet("ProductComments")]
+    public async Task<ApiResult<CommentFilterResult>> GetProductComments(int pageId = 1, int take=10,int productId=0)
+    {
+        var result = await _commentFacade.GetCommentByFilter(new CommentFilterParams()
+        {
+            PageId = pageId,
+            Take = take,
+            ProductId = productId,
+            CommentStatus = CommentStatus.Accepted
+        });
         return QueryResult(result);
     }
 

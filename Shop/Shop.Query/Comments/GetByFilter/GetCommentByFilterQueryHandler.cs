@@ -19,6 +19,10 @@ internal class GetCommentByFilterQueryHandler : IQueryHandler<GetCommentByFilter
     {
         var filterParams = request.FilterParams;
         var result = _context.Comments.OrderByDescending(c => c.CreationDate).AsQueryable();
+        if (filterParams.ProductId != null)
+        {
+            result = result.Where(r => r.ProductId == filterParams.ProductId);
+        }
         if (filterParams.CommentStatus != null)
         {
             result = result.Where(r => r.Status == filterParams.CommentStatus);
@@ -40,7 +44,7 @@ internal class GetCommentByFilterQueryHandler : IQueryHandler<GetCommentByFilter
 
         var model = new CommentFilterResult()
         {
-            Data = await result.Skip(skip).Take(filterParams.Take).Select(comment =>CommentMapper.MapDto(comment)).ToListAsync(cancellationToken),
+            Data = await result.Skip(skip).Take(filterParams.Take).Select(comment =>CommentMapper.Map(comment)).ToListAsync(cancellationToken),
             FilterParams = filterParams,
         };
         model.GeneratePaging(result, filterParams.Take, filterParams.PageId);

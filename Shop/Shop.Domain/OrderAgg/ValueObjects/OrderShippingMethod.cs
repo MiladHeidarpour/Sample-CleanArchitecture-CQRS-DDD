@@ -2,11 +2,11 @@
 
 namespace Shop.Domain.OrderAgg.ValueObjects;
 
-public class ShippingMethod : ValueObject
+public class OrderShippingMethod : ValueObject
 {
     public string ShippingType { get;private set; }
     public int ShippingCost { get; private set; }
-    public ShippingMethod(string shippingType, int shippingCost)
+    public OrderShippingMethod(string shippingType, int shippingCost)
     {
         ShippingType = shippingType;
         ShippingCost = shippingCost;

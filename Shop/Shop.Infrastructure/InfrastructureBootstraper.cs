@@ -34,6 +34,7 @@ public static class InfrastructureBootstraper
         services.AddTransient<ISliderRepository, SliderRepository>();
         services.AddTransient<IUserRepository, UserRepository>();
         services.AddTransient<ICommentRepository, CommentRepository>();
+        services.AddTransient<IShippingMethodRepository, ShippingMethodRepository>();
 
         services.AddTransient<DapperContext>(_ =>
         {

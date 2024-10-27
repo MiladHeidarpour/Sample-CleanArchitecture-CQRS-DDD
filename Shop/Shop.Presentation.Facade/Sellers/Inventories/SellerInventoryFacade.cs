@@ -3,8 +3,10 @@ using Common.Application;
 using MediatR;
 using Shop.Application.Sellers.AddInventory;
 using Shop.Application.Sellers.EditInventory;
+using Shop.Domain.SellerAgg;
 using Shop.Query.Sellers.DTOs;
 using Shop.Query.Sellers.Inventories.GetById;
+using Shop.Query.Sellers.Inventories.GetByProductId;
 using Shop.Query.Sellers.Inventories.GetListBySellerId;
 
 namespace Shop.Presentation.Facade.Sellers.Inventories;
@@ -36,5 +38,10 @@ internal class SellerInventoryFacade : ISellerInventoryFacade
     public async Task<List<InventoryDto>> GetList(long sellerId)
     {
         return await _mediator.Send(new GetSellerInventoriesBySellerIdQuery(sellerId));
+    }
+
+    public async Task<List<InventoryDto>> GetByProductId(long productId)
+    {
+        return await _mediator.Send(new GetInventoriesByProductIdQuery(productId));
     }
 }

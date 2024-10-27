@@ -31,7 +31,7 @@ public class OrderController : ApiController
         return QueryResult(result);
     }
 
-    [HttpGet("{Current}")]
+    [HttpGet("Current")]
     public async Task<ApiResult<OrderDto?>> GetCurrentOrder()
     {
         var result = await _orderFacade.GetCurrentOrder(User.GetUserId());

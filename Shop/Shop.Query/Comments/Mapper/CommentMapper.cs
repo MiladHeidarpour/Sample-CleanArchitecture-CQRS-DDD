@@ -6,12 +6,10 @@ namespace Shop.Query.Comments.Mapper;
 
 internal static class CommentMapper
 {
-    public static CommentDto? MapToDto(this Comment? comment)
+    public static CommentDto? Map(this Comment? comment)
     {
         if (comment == null)
-        {
             return null;
-        }
         return new CommentDto()
         {
             Id = comment.Id,
@@ -20,15 +18,13 @@ internal static class CommentMapper
             UserId = comment.UserId,
             ProductId = comment.ProductId,
             Text = comment.Text,
+
         };
     }
-
-    public static CommentDto MapDto(this Comment comment)
+    public static CommentDto MapFilterComment(this Comment comment)
     {
         if (comment == null)
-        {
             return null;
-        }
         return new CommentDto()
         {
             Id = comment.Id,
@@ -37,6 +33,7 @@ internal static class CommentMapper
             UserId = comment.UserId,
             ProductId = comment.ProductId,
             Text = comment.Text,
+
         };
     }
 }

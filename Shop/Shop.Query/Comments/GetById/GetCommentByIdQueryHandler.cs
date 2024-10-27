@@ -18,6 +18,6 @@ internal class GetCommentByIdQueryHandler : IQueryHandler<GetCommentByIdQuery, C
     public async Task<CommentDto?> Handle(GetCommentByIdQuery request, CancellationToken cancellationToken)
     {
         var comment = await _context.Comments.FirstOrDefaultAsync(f => f.Id == request.CommentId,cancellationToken);
-        return comment.MapToDto();
+        return comment.Map();
     }
 }

@@ -5,59 +5,59 @@ namespace Shop.Domain.OrderAgg;
 
 public class OrderItem : BaseEntity
 {
-    public long OrderId { get; internal set; }
-    public long InventoryId { get; private set; }
-    public int Count { get; private set; }
-    public int Price { get; private set; }
-    public int TotalPrice => Price * Count;
     public OrderItem(long inventoryId, int count, int price)
     {
-        PriceGaurd(price);
-        CountGaurd(count);
+        PriceGuard(price);
+        CountGuard(count);
+
         InventoryId = inventoryId;
         Count = count;
         Price = price;
     }
 
-    public void ChangeCount(int newCount)
-    {
-        CountGaurd(newCount);
-        Count = newCount;
-    }
+    public long OrderId { get; internal set; }
+    public long InventoryId { get; private set; }
+    public int Count { get; private set; }
+    public int Price { get; private set; }
+    public int TotalPrice => Price * Count;
+
     public void IncreaseCount(int count)
     {
         Count += count;
     }
+
     public void DecreaseCount(int count)
     {
         if (Count == 1)
-        {
             return;
-        }
         if (Count - count <= 0)
-        {
             return;
-        }
+
         Count -= count;
     }
+
+    public void ChangeCount(int newCount)
+    {
+        CountGuard(newCount);
+
+        Count = newCount;
+    }
+
     public void SetPrice(int newPrice)
     {
-        PriceGaurd(newPrice);
+        PriceGuard(newPrice);
         Price = newPrice;
     }
 
-    public void PriceGaurd(int newPrice)
+    public void PriceGuard(int newPrice)
     {
         if (newPrice < 1)
-        {
             throw new InvalidDomainDataException("مبلغ کالا نامعتبر است");
-        }
     }
-    public void CountGaurd(int newCount)
+
+    public void CountGuard(int count)
     {
-        if (Count < 1)
-        {
+        if (count < 1)
             throw new InvalidDomainDataException();
-        }
     }
 }

@@ -7,6 +7,7 @@ using Shop.Presentation.Facade.Roles;
 using Shop.Presentation.Facade.Sellers;
 using Shop.Presentation.Facade.Sellers.Inventories;
 using Shop.Presentation.Facade.SiteEntities.Banners;
+using Shop.Presentation.Facade.SiteEntities.ShippingMethods;
 using Shop.Presentation.Facade.SiteEntities.Sliders;
 using Shop.Presentation.Facade.Users;
 using Shop.Presentation.Facade.Users.Addresses;
@@ -28,5 +29,6 @@ public static class FacadeBootstrapper
         services.AddScoped<ISliderFacade, SliderFacade>();
         services.AddScoped<IUserAddressFacade, UserAddressFacade>();
         services.AddScoped<IUserFacade, UserFacade>();
+        services.AddScoped<IShippingMethodFacade, ShippingMethodFacade>();
     }
 }

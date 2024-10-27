@@ -17,7 +17,7 @@ internal class GetSellerByIdQueryHandler : IQueryHandler<GetSellerByIdQuery, Sel
 
     public async Task<SellerDto?> Handle(GetSellerByIdQuery request, CancellationToken cancellationToken)
     {
-        var seller = await _context.Sellers.FirstOrDefaultAsync(f => f.Id == request.Id,cancellationToken);
+        var seller = await _context.Sellers.FirstOrDefaultAsync(f => f.UserId == request.Id,cancellationToken);
         return seller.MapDto();
     }
 }
