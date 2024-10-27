@@ -1,6 +1,7 @@
 ﻿using Common.Domain;
 using Common.Domain.Exceptions;
 using Shop.Domain.OrderAgg.Enums;
+using Shop.Domain.OrderAgg.Events;
 using Shop.Domain.OrderAgg.ValueObjects;
 
 namespace Shop.Domain.OrderAgg;
@@ -96,12 +97,18 @@ public class Order : AggregateRoot
         Status = status;
         LastUpdate = DateTime.Now;
     }
-    public void CheckOut(OrderAddress orderAddress)
+    public void CheckOut(OrderAddress orderAddress,OrderShippingMethod shippingMethod)
     {
         ChangeOrderGaurd();
         Address = orderAddress;
+        ShippingMethod = shippingMethod;
     }
-
+    public void Finally()
+    {
+        Status = OrderStatus.Finally;
+        LastUpdate = DateTime.Now;
+        AddDomainEvent(new OrderFinalized(Id));
+    }
     public void ChangeOrderGaurd()
     {
         if (Status != OrderStatus.Pending)

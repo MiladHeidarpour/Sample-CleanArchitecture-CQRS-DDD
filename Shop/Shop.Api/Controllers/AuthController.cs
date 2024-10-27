@@ -14,7 +14,6 @@ using Shop.Application.Users.RemoveToken;
 using Shop.Domain.UserAgg;
 using Shop.Presentation.Facade.Users;
 using Shop.Query.Users.DTOs;
-using System.Runtime.Intrinsics.Arm;
 using UAParser;
 
 namespace Shop.Api.Controllers;

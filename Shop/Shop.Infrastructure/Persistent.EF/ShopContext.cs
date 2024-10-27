@@ -12,14 +12,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Common.Domain;
+using Shop.Infrastructure._Utilities.MediatR;
 
 namespace Shop.Infrastructure.Persistent.EF;
 
 public class ShopContext:DbContext
 {
-    public ShopContext(DbContextOptions<ShopContext> options):base(options)
+    private readonly ICustomPublisher _publisher;
+    public ShopContext(DbContextOptions<ShopContext> options, ICustomPublisher publisher):base(options)
     {
-
+        _publisher = publisher;
     }
     public DbSet<Category> Categories { get; set; }
     public DbSet<Comment> Comments { get; set; }
@@ -32,6 +35,30 @@ public class ShopContext:DbContext
     public DbSet<User> Users { get; set; }
     public DbSet<ShippingMethod> ShippingMethods { get; set; }
 
+
+    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
+    {
+        var modifiedEntities = GetModifiedEntities();
+        await PublishEvents(modifiedEntities);
+        return await base.SaveChangesAsync(cancellationToken);
+    }
+    private List<AggregateRoot> GetModifiedEntities() =>
+        ChangeTracker.Entries<AggregateRoot>()
+            .Where(x => x.State != EntityState.Detached)
+            .Select(c => c.Entity)
+            .Where(c => c.DomainEvents.Any()).ToList();
+
+    private async Task PublishEvents(List<AggregateRoot> modifiedEntities)
+    {
+        foreach (var entity in modifiedEntities)
+        {
+            var events = entity.DomainEvents;
+            foreach (var domainEvent in events)
+            {
+                await _publisher.Publish(domainEvent, PublishStrategy.ParallelNoWait);
+            }
+        }
+    }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
