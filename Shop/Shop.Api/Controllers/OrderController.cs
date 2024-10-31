@@ -7,6 +7,7 @@ using Shop.Application.Orders.Checkout;
 using Shop.Application.Orders.DecreaseItemCount;
 using Shop.Application.Orders.IncreaseItemCount;
 using Shop.Application.Orders.RemoveItem;
+using Shop.Domain.OrderAgg.Enums;
 using Shop.Domain.RoleAgg.Enums;
 using Shop.Presentation.Facade.Orders;
 using Shop.Query.Orders.DTOs;
@@ -31,6 +32,22 @@ public class OrderController : ApiController
         return QueryResult(result);
     }
 
+    [HttpGet("Current/Filter")]
+    public async Task<ApiResult<OrderFilterResult>> GetUserOrdersByFilter(int pageId = 1, int take = 10, OrderStatus status = OrderStatus.Finally)
+    {
+        var userId = User.GetUserId();
+        var result = await _orderFacade.GetOrdersByFilter(new OrderFilterParams()
+        {
+            UserId = userId,
+            PageId = pageId,
+            Take = take,
+            Status = status,
+            EndDate = null,
+            StartDate = null,
+        });
+        return QueryResult(result);
+    }
+
     [HttpGet("Current")]
     public async Task<ApiResult<OrderDto?>> GetCurrentOrder()
     {
@@ -43,6 +60,13 @@ public class OrderController : ApiController
     {
         var result = await _orderFacade.GetOrderById(orderId);
         return QueryResult(result);
+    }
+
+    [HttpPut("SendOrder/{orderId}")]
+    public async Task<ApiResult> SendOrder(long orderId)
+    {
+        var result = await _orderFacade.SendOrder(orderId);
+        return CommandResult(result);
     }
 
     [HttpPost]
@@ -74,7 +98,7 @@ public class OrderController : ApiController
     }
 
     [HttpDelete("OrderItem/{ItemId}")]
-    public async Task<ApiResult> RemoveOrderItem( long ItemId)
+    public async Task<ApiResult> RemoveOrderItem(long ItemId)
     {
         var result = await _orderFacade.RemoveOrderItem(new RemoveOrderItemCommand(User.GetUserId(), ItemId));
         return CommandResult(result);

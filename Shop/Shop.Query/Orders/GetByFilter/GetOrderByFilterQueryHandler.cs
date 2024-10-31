@@ -16,32 +16,31 @@ internal class GetOrderByFilterQueryHandler : IQueryHandler<GetOrderByFilterQuer
 
     public async Task<OrderFilterResult> Handle(GetOrderByFilterQuery request, CancellationToken cancellationToken)
     {
-        var filterParams = request.FilterParams;
+        var @params = request.FilterParams;
         var result = _context.Orders.OrderByDescending(d => d.Id).AsQueryable();
 
-        if (filterParams.Status != null)
-        {
-            result = result.Where(r => r.Status == filterParams.Status);
-        }
-        if (filterParams.UserId != null)
-        {
-            result = result.Where(r => r.UserId == filterParams.UserId);
-        }
-        if (filterParams.StartDate != null)
-        {
-            result = result.Where(r => r.CreationDate.Date >= filterParams.StartDate.Value.Date);
-        }
-        if (filterParams.EndDate != null)
-        {
-            result = result.Where(r => r.CreationDate.Date <= filterParams.EndDate.Value.Date);
-        }
-        var skip = (filterParams.PageId - 1) * filterParams.Take;
+        if (@params.Status != null)
+            result = result.Where(r => r.Status == @params.Status);
+
+        if (@params.UserId != null)
+            result = result.Where(r => r.UserId == @params.UserId);
+
+        if (@params.StartDate != null)
+            result = result.Where(r => r.CreationDate.Date >= @params.StartDate.Value.Date);
+
+        if (@params.EndDate != null)
+            result = result.Where(r => r.CreationDate.Date <= @params.EndDate.Value.Date);
+
+
+        var skip = (@params.PageId - 1) * @params.Take;
         var model = new OrderFilterResult()
         {
-            Data = await result.Skip(skip).Take(filterParams.Take).Select(order => order.MapFilterData(_context)).ToListAsync(cancellationToken),
-            FilterParams = filterParams,
+            Data = await result.Skip(skip).Take(@params.Take)
+                .Select(order => order.MapFilterData(_context))
+                .ToListAsync(cancellationToken),
+            FilterParams = @params
         };
-        model.GeneratePaging(result, filterParams.Take, filterParams.PageId);
+        model.GeneratePaging(result, @params.Take, @params.PageId);
         return model;
     }
 }

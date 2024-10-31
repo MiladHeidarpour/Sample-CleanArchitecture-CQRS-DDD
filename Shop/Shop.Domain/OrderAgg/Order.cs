@@ -25,21 +25,20 @@ public class Order : AggregateRoot
     public OrderShippingMethod? ShippingMethod { get; private set; }
     public List<OrderItem> Items { get; private set; }
     public DateTime? LastUpdate { get; set; }
-    public int TotalPrice { get
+    public int TotalPrice
+    {
+        get
         {
             var totalPrice = Items.Sum(f => f.TotalPrice);
-
             if (ShippingMethod != null)
-            {
                 totalPrice += ShippingMethod.ShippingCost;
-            }
-            if (Discount!=null)
-            {
-                totalPrice -= Discount.DiscountAmount;
-            }
 
-            return 0;
-        } }
+            if (Discount != null)
+                totalPrice -= Discount.DiscountAmount;
+
+            return totalPrice;
+        }
+    }
     public int ItemCount => Items.Count;
 
     public void AddItem(OrderItem item)
@@ -74,7 +73,7 @@ public class Order : AggregateRoot
         currentItem.ChangeCount(newCount);
     }
 
-    public void IncreaseItmeCount(long itemId,int count)
+    public void IncreaseItmeCount(long itemId, int count)
     {
         var currentItem = Items.FirstOrDefault(s => s.Id == itemId);
         if (currentItem == null)
@@ -97,7 +96,7 @@ public class Order : AggregateRoot
         Status = status;
         LastUpdate = DateTime.Now;
     }
-    public void CheckOut(OrderAddress orderAddress,OrderShippingMethod shippingMethod)
+    public void CheckOut(OrderAddress orderAddress, OrderShippingMethod shippingMethod)
     {
         ChangeOrderGaurd();
         Address = orderAddress;
